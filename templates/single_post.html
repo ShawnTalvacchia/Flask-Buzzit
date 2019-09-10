@@ -1,0 +1,72 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+  <div class="card-body">
+    <h2 class="card-title-top">{{ post.title }}</h2>
+
+    <h6 class="card-title">by {{ post.users.username.capitalize() }}</h6>
+    <p class="card-text">{{ post.body }}</p>
+
+    <div style="display:flex;justify-content:flex-end">
+      {% if current_user.is_authenticated and current_user.id==post.author_id %}
+      <a href="{{url_for('editpost', id=post.id)}}" class="ml-2 btn btn-warning btn-small"
+        >Edit</a
+      >
+      <a href="{{url_for('deletepost', id=post.id)}}" class="ml-2 btn btn-warning btn-small"
+        >Delete</a
+      >
+      {% endif %}
+    </div>
+    <div style="display:flex;justify-content:flex-end">
+      {% if current_user.id!=post.author_id %} {% if is_flag %}
+      <a href="{{url_for('flag_post', id=post.id)}}">
+        <i
+          class="fab fa-font-awesome"
+          style="font-size:2rem;color:red"
+        ></i>
+      </a>
+      {% else %}
+      <a href="{{url_for('flag_post', id=post.id)}}">
+        <i
+          class="fab fa-font-awesome-alt"
+          style="font-size:2rem;color:black"
+        ></i>
+      </a>
+      {% endif %} {% endif %}
+    </div>  
+    
+
+      {% include 'includes/new_comment.html' %}
+  </div>
+  <div class="accordion" id="accordionExample">
+    <div class="comment-container">
+      <div class="card-header" style="text-align:center" id="headingTwo">
+        <h2
+          class="mb-0 btn btn-link collapsed"
+          data-toggle="collapse"
+          data-target="#collapseTwo"
+          aria-expanded="false"
+          aria-controls="collapseTwo"
+        >
+          Comments
+        </h2>
+      </div>
+      <div
+        id="collapseTwo"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionExample"
+      >
+        {% for comment in comments %}
+        <div class="card card-body">
+          <p>{{ comment.users.username.capitalize() }}</p>
+          <p>{{ comment.body }}</p>
+          <p>{{ comment.created.strftime("%m/%d/%Y, %H:%M") }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+    {% endblock %}
+  </div>
+</div>

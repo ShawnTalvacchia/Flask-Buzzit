@@ -1,0 +1,12 @@
+{% extends "layout.html" %} {% block content %}
+<div>
+  <form class="post-form new_comment" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.body(class="form-control", id="exampleFormControlTextarea1", rows="3") }}
+    </div>
+    {{ form.submit(class="btn btn-lg btn-secondary btn-block register-btn") }}
+  </form>
+</div>
+
+{% endblock %}

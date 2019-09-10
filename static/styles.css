@@ -1,0 +1,259 @@
+body {
+  font-size: 0.875rem;
+}
+
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #999;
+}
+
+.sidebar .nav-link.active {
+  color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+/*
+ * Content
+ */
+
+[role="main"] {
+  padding-top: 48px; /* Space for fixed navbar */
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+.navbar .form-control {
+  padding: 0.75rem 1rem;
+  border-width: 0;
+  border-radius: 0;
+}
+
+/* cards */
+.card {
+  border-color: rgba(223, 225, 229, 0);
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  margin: 20px;
+}
+
+.card:hover {
+  box-shadow: 0 1px 6px 1px rgba(32, 33, 36, 0.38);
+}
+
+/* forms */
+
+.post-form {
+  margin: 3rem;
+}
+
+.form-control-dark {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.form-control-dark:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+.singin-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.register-container {
+  background-color: #138496;
+  display: flex;
+  justify-content: center;
+  padding-top: 4rem;
+  height: 100vh;
+  margin-top: -1rem;
+}
+
+.row-register-container {
+  margin-left: 7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.logo {
+  font-size: 7rem;
+  font-family: "Knewave", cursive;
+  color: #e0a800;
+}
+.logo2 {
+  font-size: 7rem;
+  font-family: "Knewave", cursive;
+  color: black;
+}
+
+.custom-signin {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 30rem;
+  max-width: 30rem;
+  min-width: 30rem;
+  background: #000000d4;
+  padding: 3rem 2rem;
+}
+.custom-register {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 40rem;
+  max-width: 30rem;
+  min-width: 30rem;
+  background: #000000e3;
+  padding: 1rem 2rem;
+}
+
+.form-top {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  #content {
+    margin-top: 1rem;
+  }
+}
+@media (max-width: 768px) {
+  #content {
+    margin-top: 5rem;
+  }
+}
+
+.yellow {
+  color: #e0a800;
+  font-size: 18px;
+  letter-spacing: 7px;
+}
+.white {
+  color: white;
+  font-size: 15px;
+  letter-spacing: 5px;
+  padding: 0.3rem;
+}
+
+.register-link {
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .new_comment {
+    margin-left: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .new_comment {
+    margin-left: -4rem;
+  }
+}
+
+.sidebar .nav-link.active {
+  color: #e0a800;
+}
+
+.clickable {
+  text-decoration: none;
+}
+.clickable:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.comment-container {
+  margin-left: -2rem;
+  margin-right: -2rem;
+  background-color: #e0a800;
+}
+
+.btn-link {
+  color: black;
+}
+.btn-link:hover {
+  color: white;
+}
+
+.spacer {
+  width: 30%;
+}
+
+.card-title-top {
+  color: #715604;
+}
+.card-title-top:hover {
+  color: black;
+}
+
+.card-views {
+  font-size: 0.7rem;
+}

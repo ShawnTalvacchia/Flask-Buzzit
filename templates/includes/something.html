@@ -1,0 +1,31 @@
+<script src="https://kit.fontawesome.com/e1bd8466eb.js"></script>
+{% for post in posts %}
+<div class="card post-body">
+  <div class="card-body">
+    <a href="{{url_for('single_post', id=post.id)}}" class="clickable">
+      <h2 class="card-title-top">{{ post.title }}</h2>
+    </a>
+    <div style="display:flex;justify-content: flex-end">
+      <h6 class="card-title">{{ post.users.username.capitalize() }}</h6>
+    </div>
+    <p class="card-text">{{ post.body[:300] }}</p>
+    <h6 class="card-views">Views: {{ post.view_count }}</h6>
+
+    <div class="card-buttons">
+      {% if current_user.is_authenticated and current_user.id==post.author_id %}
+      <a
+        href="{{url_for('editpost', id=post.id)}}"
+        class="btn btn-outline-warning btn-small"
+        >Edit</a
+      >
+      <a
+        href="{{url_for('deletepost', id=post.id)}}"
+        class="btn btn-outline-warning btn-small"
+        >Delete</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endfor %}
