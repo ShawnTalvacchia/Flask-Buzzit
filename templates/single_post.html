@@ -1,7 +1,15 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} 
+
+
+
+
+{% block content %}
+
+
 <div class="container">
   <div class="card-body">
     <h2 class="card-title-top">{{ post.title }}</h2>
+    <h2 class="card-title-top">{{ like_count }}</h2>
 
     <h6 class="card-title">by {{ post.users.username.capitalize() }}</h6>
     <p class="card-text">{{ post.body }}</p>
@@ -17,21 +25,44 @@
       {% endif %}
     </div>
     <div style="display:flex;justify-content:flex-end">
-      {% if current_user.id!=post.author_id %} {% if is_flag %}
-      <a href="{{url_for('flag_post', id=post.id)}}">
-        <i
-          class="fab fa-font-awesome"
-          style="font-size:2rem;color:red"
-        ></i>
-      </a>
-      {% else %}
-      <a href="{{url_for('flag_post', id=post.id)}}">
-        <i
-          class="fab fa-font-awesome-alt"
-          style="font-size:2rem;color:black"
-        ></i>
-      </a>
-      {% endif %} {% endif %}
+      {% if current_user.id!=post.author_id %} 
+      
+      
+        {% if is_flag %}
+        <a href="{{url_for('flag_post', id=post.id)}}">
+          <i
+            class="fab fa-font-awesome"
+            style="font-size:2rem;color:red"
+          >Flagged</i>
+        </a>
+        {% else %}
+        <a href="{{url_for('flag_post', id=post.id)}}">
+          <i
+            class="fab fa-font-awesome-alt"
+            style="font-size:2rem;color:black"
+          >Flag if inappropriate</i>
+        </a>
+        {% endif %} 
+
+      {% endif %}
+
+      <div>
+        {% if is_like %}
+        <a href="{{url_for('like_post', id=post.id)}}">
+          <i
+            class="fas fa-heart"
+            style="font-size:2rem;color:red"
+          >Liked</i>
+        </a>
+        {% else %}
+        <a href="{{url_for('like_post', id=post.id)}}">
+          <i
+            class="far fa-heart"
+            style="font-size:2rem;color:black"
+          >Unlike</i>
+        </a>
+        {% endif %} 
+        </div>
     </div>  
     
 
