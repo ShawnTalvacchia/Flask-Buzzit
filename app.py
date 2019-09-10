@@ -42,6 +42,11 @@ class Likes(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+class Followings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
+
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +59,11 @@ class Users(UserMixin, db.Model):
         'users', lazy=True))
     likes = db.relationship('Likes', backref=db.backref(
         'users', lazy=True))
+    haha = db.relationship("Followings", foreign_keys=[Followings.follower_id], backref=db.backref(
+        'follower', lazy='joined'), lazy="dynamic")
+    hihi = db.relationship("Followings", foreign_keys=[Followings.followed_id], backref=db.backref(
+        'followed', lazy='joined'), lazy="dynamic")
+    
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -158,10 +168,10 @@ def home():
 
 @app.route('/profile/<id>')
 @login_required
-def profile():
+def profile(id):
     posts = Posts.query.filter_by(
-        author_id=current_user.id).order_by(desc(Posts.id))
-    return render_template('profile.html', posts=posts, id=current_user.id)
+        author_id=id).order_by(desc(Posts.id)).all()
+    return render_template('profile.html', posts=posts)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -344,6 +354,26 @@ def top_posts():
     posts = Posts.query.order_by(desc(Posts.view_count))
     return render_template('top_posts.html', posts=posts)
 
+@app.route('/follow/<int:id>')
+@login_required
+def follow(id):
+    check = Followings.query.filter_by(follower_id = current_user.id, followed_id = id).first()
+    if check:
+        flash(['hello, plz no'])
+        return redirect(url_for('top_posts'))
+    else:
+        is_followed = Followings(follower_id = current_user.id, followed_id = id)
+
+        db.session.add(is_followed)
+        db.session.commit()
+        return redirect(url_for('profile', id=id))
+    
+@app.route('/khoa')
+def khoa():
+    a = Followings.query.filter_by(follower_id=current_user.id).all()
+    # print('=============', [ i.username for i in a])
+    print(a[0].followed.username)
+    return "OK"
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
