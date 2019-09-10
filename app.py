@@ -20,7 +20,7 @@ migrate = Migrate(app, db)
 POSTGRES = {
     'user': "shawn",
     'pw': "123",
-    'db': "blog",
+    'db': "shawnblog",
     'host': "localhost",
     'port': 5432,
 }
@@ -36,6 +36,11 @@ class Flags(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+class Likes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class Users(UserMixin, db.Model):
@@ -46,6 +51,8 @@ class Users(UserMixin, db.Model):
     posts = db.relationship('Posts', backref="users", lazy="dynamic")
     comments = db.relationship('Comments', backref="users", lazy="dynamic")
     flags = db.relationship('Flags', backref=db.backref(
+        'users', lazy=True))
+    likes = db.relationship('Likes', backref=db.backref(
         'users', lazy=True))
 
     def set_password(self, password):
@@ -65,8 +72,11 @@ class Posts(db.Model):
     updated = db.Column(db.DateTime)
     comments = db.relationship('Comments', backref="posts", lazy="dynamic")
     view_count = db.Column(db.Integer, default=0)
+    
     flags = db.relationship('Flags', backref=db.backref(
         'posts'), lazy=True)
+    likes = db.relationship('Likes', backref=db.backref(
+        'posts', lazy=True))
 
 
 class Comments(db.Model):
@@ -259,11 +269,19 @@ def single_post(id):
     post = Posts.query.filter_by(id=id).first()
     comments = post.comments.all()
     post.view_count += 1
-    check = Flags.query.filter_by(user_id=current_user.id, post_id=id).first()
-    if check:
+    like_count = Likes.query.filter_by(post_id=id).count()
+    print('========================',like_count)
+    check_flag = Flags.query.filter_by(user_id=current_user.id, post_id=id).first()
+    if check_flag:
         is_flag = True
     else:
         is_flag = False
+    
+    check_like = Likes.query.filter_by(user_id=current_user.id, post_id=id).first()
+    if check_like:
+        is_like = True
+    else:
+        is_like = False
     
     
     form = New_comment()
@@ -285,7 +303,7 @@ def single_post(id):
 
 
     db.session.commit()
-    return render_template(template, post=post, comments=comments, is_flag=is_flag, form=form)
+    return render_template(template, post=post, comments=comments, is_flag=is_flag, is_like=is_like, form=form, like_count=like_count)
 
 
 @app.route('/single_post/<id>/flag', methods=['POST', 'GET'])
@@ -302,7 +320,21 @@ def flag_post(id):
     db.session.commit()
     return redirect(url_for('single_post', id=id))
 
+@app.route('/single_post/<id>/like', methods=['POST', 'GET'])
+@login_required
+def like_post(id):
+    post = Posts.query.filter_by(id=id).first()
 
+    check = Likes.query.filter_by(user_id=current_user.id, post_id=id).first()
+    if not check:
+        like = Likes(user_id = current_user.id,
+                                post_id=id)
+        db.session.add(like)        
+    else:
+        db.session.delete(check)
+        
+    db.session.commit()
+    return redirect(url_for('single_post', id=id))
 
 
 
