@@ -138,9 +138,12 @@ def load_user(id):
 
 @app.route('/')
 def home():
-    template = ['index.html', 'includes/something.html']
-    posts = Posts.query.order_by(desc(Posts.id))
-    return render_template(template, posts=posts)
+    if current_user.is_authenticated:
+        template = ['index.html', 'includes/something.html']
+        posts = Posts.query.order_by(desc(Posts.id))
+        return render_template(template, posts=posts)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/profile/<id>')
@@ -311,4 +314,4 @@ def top_posts():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
