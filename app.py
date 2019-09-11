@@ -25,10 +25,9 @@ POSTGRES = {
     'host': "localhost",
     'port': 5432,
 }
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
-# %(port)s/%(db)s' % POSTGRES
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:123@localhost:5432/blog'
 #######################################################################
 
 # define models
@@ -44,7 +43,6 @@ class Likes(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Followings(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
     follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
 
@@ -281,7 +279,6 @@ def single_post(id):
     comments = post.comments.all()
     post.view_count += 1
     like_count = Likes.query.filter_by(post_id=id).count()
-    print('========================',like_count)
     check_flag = Flags.query.filter_by(user_id=current_user.id, post_id=id).first()
     if check_flag:
         is_flag = True
@@ -375,6 +372,12 @@ def khoa():
     # print('=============', [ i.username for i in a])
     print(a[0].followed.username)
     return "OK"
+
+@app.route('/profile/following')
+@login_required
+def following():
+    followings = Followings.query.filter_by(follower_id=current_user.id).all()
+    return render_template('following.html', followings=followings)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
