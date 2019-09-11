@@ -20,7 +20,7 @@ migrate = Migrate(app, db)
 POSTGRES = {
     'user': "shawn",
     'pw': "123",
-    'db': "shawnblog",
+    'db': "blog",
     'host': "localhost",
     'port': 5432,
 }
