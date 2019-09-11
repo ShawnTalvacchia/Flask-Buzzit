@@ -58,12 +58,14 @@
       </div>
       {% endif %} {% if current_user.id!=post.author_id %}
       <div>
-        {% if is_flag %}
+        {% if post.is_flag(current_user.id) %}
         <a
           href="{{url_for('flag_post', id=post.id)}}"
           style="display:flex;align-items:center"
         >
-          <h6 style="color:red;font-size:.6rem;margin-right:1rem">
+          <h6
+            style="color:red;font-size:.6rem;margin-right:1rem;font-style:italic"
+          >
             inappropriate
           </h6>
           <i class="fab fa-font-awesome" style="color:red;font-size:1.5rem">
@@ -71,7 +73,9 @@
         </a>
         {% else %}
         <a href="{{url_for('flag_post', id=post.id)}}" class="inappropriate">
-          <h6 style="color:black;font-size:.6rem;margin-right:1rem">
+          <h6
+            style="color:black;font-size:.6rem;margin-right:1rem;font-style:italic"
+          >
             appropriate
           </h6>
           <i class="fab fa-font-awesome" style="color:black;font-size:1.5rem">

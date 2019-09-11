@@ -1,6 +1,16 @@
 body {
   font-size: 0.875rem;
-  background-color: #e0a8000d;
+  background-color: #f7f3e8;
+  font-family: "Raleway", sans-serif;
+  font-weight: 100;
+}
+
+a {
+  color: #e0a800;
+}
+
+a:hover {
+  color: #e0a800;
 }
 
 .feather {
@@ -42,6 +52,7 @@ body {
 .sidebar .nav-link {
   font-weight: 500;
   color: #333;
+  font-size: 1rem;
 }
 
 .sidebar .nav-link .feather {
@@ -56,6 +67,10 @@ body {
 .sidebar .nav-link:hover .feather,
 .sidebar .nav-link.active .feather {
   color: inherit;
+}
+
+.nav-link {
+  padding: 0.7rem;
 }
 
 .sidebar-heading {
@@ -93,7 +108,7 @@ body {
 .card {
   border-color: rgba(223, 225, 229, 0);
   box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.13);
-  margin: 20px;
+  margin: 10px 0 10px 0;
 }
 
 .card:hover {
@@ -133,6 +148,10 @@ body {
   padding-top: 4rem;
   height: 100vh;
   margin-top: -1rem;
+}
+
+.register-btn {
+  background-color: #272c30;
 }
 
 .row-register-container {
@@ -249,11 +268,12 @@ body {
 }
 
 .card-title-top {
-  color: #443405;
-  font-size: 4rem;
+  color: #343a40;
+  font-size: 2.3rem;
+  font-weight: bold;
 }
 .card-title-top:hover {
-  color: black;
+  color: #e0a800;
 }
 
 .card-views {
@@ -310,7 +330,7 @@ body {
 }
 
 .btn-custom:hover {
-  background-color: black;
+  background-color: #343a40;
   color: #e0a800;
   height: 2rem;
   display: flex;
@@ -325,4 +345,30 @@ body {
 }
 .inappropriate:hover {
   text-decoration: none;
+}
+
+.container-single-post {
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+}
+
+.accordion .comment-container {
+  padding: 0rem 2rem;
+  background-color: #272c30;
+}
+
+.accordion .comment-container .card-header {
+  padding: 0.75rem;
+  margin: 0rem -2rem;
+  margin-bottom: 0;
+  background-color: #e0a800;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.following-containers {
+  display: flex;
+}
+
+.post-body {
+  padding: 0.5rem;
 }

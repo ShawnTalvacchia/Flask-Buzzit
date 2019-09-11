@@ -37,14 +37,40 @@ class Flags(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
+
+
+class Followings(db.Model):
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
+
+
 class Likes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-class Followings(db.Model):
-    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
-    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),primary_key=True)
+
+class Posts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(
+        db.Integer, db.ForeignKey('users.id'), nullable=False)
+    title = db.Column(db.Text, nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created = db.Column(db.DateTime, nullable=False)
+    updated = db.Column(db.DateTime)
+    comments = db.relationship('Comments', backref="posts", lazy="dynamic")
+    view_count = db.Column(db.Integer, default=0)
+    
+    flags = db.relationship('Flags', backref=db.backref(
+        'posts'), lazy=True)
+    likes = db.relationship('Likes', backref=db.backref(
+        'posts', lazy=True))
+    
+    def is_flag(self, user_id):
+        return Flags.query.filter_by(post_id=self.id, user_id=user_id).first()
+
+    def is_liked(self, user_id):
+        return Likes.query.filter_by(post_id=self.id, user_id=user_id).first()
 
 
 class Users(UserMixin, db.Model):
@@ -72,24 +98,6 @@ class Users(UserMixin, db.Model):
 
     def is_followed(self, user_id):
         return Followings.query.filter_by(follower_id=self.id, followed_id=user_id).first()
-class Posts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(
-        db.Integer, db.ForeignKey('users.id'), nullable=False)
-    title = db.Column(db.Text, nullable=False)
-    body = db.Column(db.Text, nullable=False)
-    created = db.Column(db.DateTime, nullable=False)
-    updated = db.Column(db.DateTime)
-    comments = db.relationship('Comments', backref="posts", lazy="dynamic")
-    view_count = db.Column(db.Integer, default=0)
-    
-    flags = db.relationship('Flags', backref=db.backref(
-        'posts'), lazy=True)
-    likes = db.relationship('Likes', backref=db.backref(
-        'posts', lazy=True))
-    
-    def is_liked(self, user_id):
-        return Likes.query.filter_by(post_id=self.id, user_id=user_id).first()
 
 
 class Comments(db.Model):
@@ -360,8 +368,10 @@ def top_posts():
 @app.route('/liked_posts')
 def liked_posts():
     template = ['liked_post.html', 'includes/something.html']
-    liked_posts = Likes.query.filter_by(user_id=current_user.id).all()
-    return render_template('liked_posts.html', liked_posts=liked_posts)
+    likes = Likes.query.filter_by(user_id = current_user.id).all()
+    posts =  [ like.posts for like in likes]
+
+    return render_template('liked_posts.html', posts = posts)
 
 @app.route('/follow/<int:id>')
 @login_required
@@ -382,7 +392,13 @@ def follow(id):
 @login_required
 def following():
     followings = Followings.query.filter_by(follower_id=current_user.id).all()
-    return render_template('following.html', followings=followings)
+    # next three lines don't work. experimenting with search methods.. 
+    # ... if you can't figure it out
+    users = [ following.followed for following in followings]
+    posts = [ user.posts for user in users]
+    last_post = posts[-1]
+    followed_bys = Followings.query.filter_by(followed_id=current_user.id).all()
+    return render_template('following.html', followings=followings, followed_bys=followed_bys, last_post=last_post)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

@@ -1,19 +1,34 @@
 {% extends "layout.html" %} {% block content %}
 
-<div class="container">
-  {% for following in followings %}
-  <div class="card post-body">
-    <div class="card-body">
+<div class="container following-containers">
+  <div class="container">
+    <h5>Following</h5>
+
+    {% for following in followings %}
+    <div class="card post-body">
       <a
         href="{{url_for('profile', id=following.followed.id)}}"
         class="clickable"
       >
-        <h2 class="card-title-top">{{ following.followed.username }}</h2>
+        <h5>{{ following.followed.username.capitalize() }}</h5>
+        <h6>{{ last_post.title }}</h6>
       </a>
     </div>
+    {% endfor %}
+  </div>
+  <div class="container">
+    <h5>Followed by</h5>
+    {% for followed_by in followed_bys %}
+    <div class="card post-body">
+      <a
+        href="{{url_for('profile', id=followed_by.follower.id)}}"
+        class="clickable"
+      >
+        <h5>{{ followed_by.follower.username.capitalize() }}</h5>
+      </a>
+    </div>
+    {% endfor %}
   </div>
 
-  {% endfor %}
+  {% endblock %}
 </div>
-
-{% endblock %}
