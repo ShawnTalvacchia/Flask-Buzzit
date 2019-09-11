@@ -159,7 +159,7 @@ class New_comment(FlaskForm):
     body = TextAreaField("Body", render_kw={"rows": 50, "cols": 10}, validators=[
         DataRequired(),
         Length(min=3, max=10000, message="You got 3000 characters to let us know how you feel!")])
-    submit = SubmitField("Comment")
+    submit = SubmitField("Leave a reply")
 #######################################################################
 
 

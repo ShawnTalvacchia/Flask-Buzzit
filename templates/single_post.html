@@ -10,8 +10,16 @@
   <div class="card-body">
     <h2 class="card-title-top">{{ post.title }}</h2>
 
-    <h6 class="card-title">by {{ post.users.username.capitalize() }}</h6>
-    <p style="margin-top:-14px">{{ post.created.strftime("%m/%d/%Y") }}</p>
+    <h6 class="card-title">by 
+    <a
+      href="{{url_for('profile', id=post.users.id)}}"
+      class="card-title"
+      style="font-weight:900"
+      >{{ post.users.username.capitalize() }}
+    </a>
+    </h6>
+    
+    <p>{{ post.created.strftime("%m/%d/%Y") }}</p>
     
     <p class="card-text">{{ post.body }}</p>
 
@@ -26,32 +34,40 @@
       {% endif %}
     </div>
 
-
-    <div style="display:flex;justify-content:space-between">
+  <div class="row">
+    <div 
+      class="col-6"
+      style="display:flex;flex-direction:column;justify-content:space-around">
       <!-- Likes -->
-      <div style="font-size:1rem;display:flex;justify-content: center">
+      <div style="display:flex">
         <div>
           {% if is_like %}
           <a href="{{url_for('like_post', id=post.id)}}">
             <i
               class="fas fa-heart"
-              style="color:#e0a800;margin-right:1rem"
+              style="font-size:1.5rem;color:#e0a800;margin-right:1rem"
             ></i>
           </a>
           {% else %}
           <a href="{{url_for('like_post', id=post.id)}}">
             <i
               class="far fa-heart"
-              style="color:gray;margin-right:1rem"
+              style="font-size:1.5rem;color:gray;margin-right:1rem"
             ></i>
           </a>
           {% endif %} 
-          </div>
-          <h6 style="font-size:.8rem">Likes: {{ like_count }}</h6>
+        </div>
+        <h6 style="font-size:.8rem">Likes: {{ like_count }}</h6>
       </div>
       <!-- Views -->
-      <div style="font-size:1rem">
-          <h6 style="font-size:.8rem">Views: {{ post.view_count }}</h6>
+      <div style="display:flex">
+        <a href="{{url_for('like_post', id=post.id)}}">
+          <i
+            class="far fa-eye"
+            style="font-size:1.5rem;color:darkgray;margin-right:1rem"
+          ></i>
+        </a>
+        <h6 style="font-size:.8rem">Views: {{ post.view_count }}</h6>
       </div>
       <!-- Flags -->
       {% if current_user.id!=post.author_id %} 
@@ -60,36 +76,37 @@
           <a 
             href="{{url_for('flag_post', id=post.id)}}"
             style="display:flex;align-items:center">
-            <h6
-              style="color:red;font-size:.6rem;margin-right:1rem">inappropriate
-            </h6>
             <i
               class="fab fa-font-awesome"
-              style="color:red;font-size:1.5rem"
+              style="color:red;font-size:1.5rem;margin-right:1rem"
             >
             </i>
+            <h6
+              style="color:red;font-size:.7rem;font-style:italic">inappropriate
+            </h6>
           </a>
         {% else %}
           <a 
             href="{{url_for('flag_post', id=post.id)}}"
             class="inappropriate">
-            <h6
-              style="color:black;font-size:.6rem;margin-right:1rem">appropriate
-            </h6>
             <i
               class="fab fa-font-awesome"
-              style="color:black;font-size:1.5rem"
+              style="color:black;font-size:1.5rem;margin-right:1rem"
             >
             </i>
+            <h6
+              style="color:black;font-size:.7rem;font-style:italic">appropriate
+            </h6>
           </a>
         {% endif %} 
       </div>
       {% endif %}
     </div>  
-    
-
+    <div class="col-6">
       {% include 'includes/new_comment.html' %}
+    </div>
   </div>
+</div>
   <div class="accordion" id="accordionExample">
     <div class="comment-container">
       <div class="card-header" style="text-align:center" id="headingTwo">
@@ -99,8 +116,9 @@
           data-target="#collapseTwo"
           aria-expanded="false"
           aria-controls="collapseTwo"
+          style="color:#e0a800"
         >
-          Comments
+          Replies
         </h2>
       </div>
       <div

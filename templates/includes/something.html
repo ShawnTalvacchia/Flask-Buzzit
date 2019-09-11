@@ -5,6 +5,9 @@
     <a href="{{url_for('single_post', id=post.id)}}" class="clickable">
       <h2 class="card-title-top">{{ post.title }}</h2>
     </a>
+    <p style="font-style:italic;font-size:.8rem">
+      {{ post.created.strftime("%m/%d/%Y") }}
+    </p>
     <div style="font-size:1rem;display:flex;margin-right:1rem;">
       {% if current_user.is_authenticated and current_user.id==post.author_id %}
       <a
@@ -21,9 +24,12 @@
     </div>
 
     <div style="display:flex;justify-content: flex-end">
-      <a href="{{url_for('profile', id=post.users.id)}}" class="card-title">{{
-        post.users.username.capitalize()
-      }}</a>
+      <a
+        href="{{url_for('profile', id=post.users.id)}}"
+        style="font-weight:900;font-size:1rem;color:#674f0a"
+        class="card-title"
+        >{{ post.users.username.capitalize() }}</a
+      >
     </div>
     <p class="card-text">
       {{ post.body[:250] }}
@@ -34,11 +40,10 @@
       style="display:flex;justify-content:space-between"
     >
       <div>
-        <h6 class="card-views">Views: {{ post.view_count }}</h6>
         {% if current_user.is_authenticated %}
 
         <div
-          style="font-size:1rem;display:flex;justify-content:center;margin-right:1rem;"
+          style="font-size:1.5rem;display:flex;justify-content:center;margin-right:1rem;"
         >
           <div>
             {% if post.is_liked(current_user.id) %}
@@ -63,21 +68,11 @@
           href="{{url_for('flag_post', id=post.id)}}"
           style="display:flex;align-items:center"
         >
-          <h6
-            style="color:red;font-size:.6rem;margin-right:1rem;font-style:italic"
-          >
-            inappropriate
-          </h6>
           <i class="fab fa-font-awesome" style="color:red;font-size:1.5rem">
           </i>
         </a>
         {% else %}
         <a href="{{url_for('flag_post', id=post.id)}}" class="inappropriate">
-          <h6
-            style="color:black;font-size:.6rem;margin-right:1rem;font-style:italic"
-          >
-            appropriate
-          </h6>
           <i class="fab fa-font-awesome" style="color:black;font-size:1.5rem">
           </i>
         </a>
