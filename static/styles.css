@@ -1,5 +1,6 @@
 body {
   font-size: 0.875rem;
+  background-color: #e0a8000d;
 }
 
 .feather {
@@ -91,7 +92,7 @@ body {
 /* cards */
 .card {
   border-color: rgba(223, 225, 229, 0);
-  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.13);
   margin: 20px;
 }
 
@@ -248,7 +249,8 @@ body {
 }
 
 .card-title-top {
-  color: #715604;
+  color: #443405;
+  font-size: 4rem;
 }
 .card-title-top:hover {
   color: black;
@@ -256,4 +258,71 @@ body {
 
 .card-views {
   font-size: 0.7rem;
+}
+
+.profile-header {
+  background-color: #e0a800;
+  margin: -1rem -1.5rem 1rem -1.5rem;
+  padding: 0.5rem 1rem 0.5rem 4rem;
+  margin-right: -2rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-buttons {
+  display: flex;
+}
+
+.btn-tiny {
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+  margin-right: 0.5rem;
+}
+.btn-custom2 {
+  background-color: #e9e2cf;
+  color: black;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+.btn-custom2:hover {
+  background-color: gray;
+  color: black;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+.btn-custom {
+  background-color: white;
+  color: black;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+.btn-custom:hover {
+  background-color: black;
+  color: #e0a800;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+.inappropriate {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.inappropriate:hover {
+  text-decoration: none;
 }

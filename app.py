@@ -70,7 +70,8 @@ class Users(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
+    def is_followed(self, user_id):
+        return Followings.query.filter_by(follower_id=self.id, followed_id=user_id).first()
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(
@@ -86,6 +87,9 @@ class Posts(db.Model):
         'posts'), lazy=True)
     likes = db.relationship('Likes', backref=db.backref(
         'posts', lazy=True))
+    
+    def is_liked(self, user_id):
+        return Likes.query.filter_by(post_id=self.id, user_id=user_id).first()
 
 
 class Comments(db.Model):
@@ -144,8 +148,9 @@ class New_post(FlaskForm):
 
 
 class New_comment(FlaskForm):
-    body = StringField(render_kw={"placeholder": "Share your thoughts.."}, validators=[
-                       DataRequired(), Length(max=100, message="Make it snappy!")])
+    body = TextAreaField("Body", render_kw={"rows": 50, "cols": 10}, validators=[
+        DataRequired(),
+        Length(min=3, max=10000, message="You got 3000 characters to let us know how you feel!")])
     submit = SubmitField("Comment")
 #######################################################################
 
@@ -159,7 +164,7 @@ def load_user(id):
 def home():
     if current_user.is_authenticated:
         template = ['index.html', 'includes/something.html']
-        posts = Posts.query.order_by(desc(Posts.id))
+        posts = Posts.query.order_by(desc(Posts.id)).all()
         return render_template(template, posts=posts)
     else:
         return redirect(url_for('login'))
@@ -352,26 +357,26 @@ def top_posts():
     posts = Posts.query.order_by(desc(Posts.view_count))
     return render_template('top_posts.html', posts=posts)
 
+@app.route('/liked_posts')
+def liked_posts():
+    template = ['liked_post.html', 'includes/something.html']
+    liked_posts = Likes.query.filter_by(user_id=current_user.id).all()
+    return render_template('liked_posts.html', liked_posts=liked_posts)
+
 @app.route('/follow/<int:id>')
 @login_required
 def follow(id):
     check = Followings.query.filter_by(follower_id = current_user.id, followed_id = id).first()
-    if check:
-        flash(['hello, plz no'])
-        return redirect(url_for('top_posts'))
-    else:
-        is_followed = Followings(follower_id = current_user.id, followed_id = id)
-
+    is_followed = Followings(follower_id = current_user.id, followed_id = id)
+    if not check:
         db.session.add(is_followed)
         db.session.commit()
-        return redirect(url_for('profile', id=id))
-    
-@app.route('/khoa')
-def khoa():
-    a = Followings.query.filter_by(follower_id=current_user.id).all()
-    # print('=============', [ i.username for i in a])
-    print(a[0].followed.username)
-    return "OK"
+        return redirect(url_for('profile', id=id, is_followed=is_followed))
+    else:
+        db.session.delete(check)
+        db.session.commit()
+        return redirect(url_for('profile', id=id, is_followed=is_followed))
+
 
 @app.route('/profile/following')
 @login_required

@@ -5,35 +5,80 @@
     <a href="{{url_for('single_post', id=post.id)}}" class="clickable">
       <h2 class="card-title-top">{{ post.title }}</h2>
     </a>
-    <div style="display:flex;justify-content: flex-end">
-      <a href="{{url_for('profile', id=post.users.id)}}"class="card-title" >{{ post.users.username.capitalize() }}</a>
-    </div>
-    <p class="card-text">{{ post.body[:300] }}</p>
-    <h6 class="card-views">Views: {{ post.view_count }}</h6>
-
-    <div class="card-buttons">
+    <div style="font-size:1rem;display:flex;margin-right:1rem;">
       {% if current_user.is_authenticated and current_user.id==post.author_id %}
       <a
         href="{{url_for('editpost', id=post.id)}}"
-        class="btn btn-outline-warning btn-small"
+        class="btn btn-outline-warning btn-small btn-tiny"
         >Edit</a
       >
       <a
         href="{{url_for('deletepost', id=post.id)}}"
-        class="btn btn-outline-warning btn-small"
+        class="btn btn-outline-warning btn-small btn-tiny"
         >Delete</a
       >
       {% endif %}
     </div>
 
-    <div class="card-buttons">
-      {% if current_user.is_authenticated and current_user.id!=post.author_id %}
-      <a
-        href="{{url_for('follow', id=post.users.id)}}"
-        class="btn btn-outline-warning btn-small"
-        >Follow</a
-      >
-      
+    <div style="display:flex;justify-content: flex-end">
+      <a href="{{url_for('profile', id=post.users.id)}}" class="card-title">{{
+        post.users.username.capitalize()
+      }}</a>
+    </div>
+    <p class="card-text">
+      {{ post.body[:250] }}
+      {{ '. . .' if post.body|length > 250 else ''}}
+    </p>
+    <div
+      class="card-buttons"
+      style="display:flex;justify-content:space-between"
+    >
+      <div>
+        <h6 class="card-views">Views: {{ post.view_count }}</h6>
+        {% if current_user.is_authenticated %}
+
+        <div
+          style="font-size:1rem;display:flex;justify-content:center;margin-right:1rem;"
+        >
+          <div>
+            {% if post.is_liked(current_user.id) %}
+            <a href="{{url_for('like_post', id=post.id)}}">
+              <i
+                class="fas fa-heart"
+                style="color:#e0a800;margin-right:1rem"
+              ></i>
+            </a>
+            {% else %}
+            <a href="{{url_for('like_post', id=post.id)}}">
+              <i class="far fa-heart" style="color:gray;margin-right:1rem"></i>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %} {% if current_user.id!=post.author_id %}
+      <div>
+        {% if is_flag %}
+        <a
+          href="{{url_for('flag_post', id=post.id)}}"
+          style="display:flex;align-items:center"
+        >
+          <h6 style="color:red;font-size:.6rem;margin-right:1rem">
+            inappropriate
+          </h6>
+          <i class="fab fa-font-awesome" style="color:red;font-size:1.5rem">
+          </i>
+        </a>
+        {% else %}
+        <a href="{{url_for('flag_post', id=post.id)}}" class="inappropriate">
+          <h6 style="color:black;font-size:.6rem;margin-right:1rem">
+            appropriate
+          </h6>
+          <i class="fab fa-font-awesome" style="color:black;font-size:1.5rem">
+          </i>
+        </a>
+        {% endif %}
+      </div>
       {% endif %}
     </div>
   </div>

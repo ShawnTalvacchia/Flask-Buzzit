@@ -9,60 +9,80 @@
 <div class="container">
   <div class="card-body">
     <h2 class="card-title-top">{{ post.title }}</h2>
-    <h2 class="card-title-top">{{ like_count }}</h2>
 
     <h6 class="card-title">by {{ post.users.username.capitalize() }}</h6>
     <p class="card-text">{{ post.body }}</p>
 
     <div style="display:flex;justify-content:flex-end">
       {% if current_user.is_authenticated and current_user.id==post.author_id %}
-      <a href="{{url_for('editpost', id=post.id)}}" class="ml-2 btn btn-warning btn-small"
+      <a href="{{url_for('editpost', id=post.id)}}" class="ml-2 btn btn-warning btn-small btn-tiny"
         >Edit</a
       >
-      <a href="{{url_for('deletepost', id=post.id)}}" class="ml-2 btn btn-warning btn-small"
+      <a href="{{url_for('deletepost', id=post.id)}}" class="ml-2 btn btn-warning btn-small btn-tiny"
         >Delete</a
       >
       {% endif %}
     </div>
-    <div style="display:flex;justify-content:flex-end">
+
+
+    <div style="display:flex;justify-content:space-between">
+      <!-- Likes -->
+      <div style="font-size:1rem;display:flex;justify-content: center">
+        <div>
+          {% if is_like %}
+          <a href="{{url_for('like_post', id=post.id)}}">
+            <i
+              class="fas fa-heart"
+              style="color:#e0a800;margin-right:1rem"
+            ></i>
+          </a>
+          {% else %}
+          <a href="{{url_for('like_post', id=post.id)}}">
+            <i
+              class="far fa-heart"
+              style="color:gray;margin-right:1rem"
+            ></i>
+          </a>
+          {% endif %} 
+          </div>
+          <h6 style="font-size:.8rem">Likes: {{ like_count }}</h6>
+      </div>
+      <!-- Views -->
+      <div style="font-size:1rem">
+          <h6 style="font-size:.8rem">Views: {{ post.view_count }}</h6>
+      </div>
+      <!-- Flags -->
       {% if current_user.id!=post.author_id %} 
-      
-      
-        {% if is_flag %}
-        <a href="{{url_for('flag_post', id=post.id)}}">
-          <i
-            class="fab fa-font-awesome"
-            style="font-size:2rem;color:red"
-          >Flagged</i>
-        </a>
-        {% else %}
-        <a href="{{url_for('flag_post', id=post.id)}}">
-          <i
-            class="fab fa-font-awesome-alt"
-            style="font-size:2rem;color:black"
-          >Flag if inappropriate</i>
-        </a>
-        {% endif %} 
-
-      {% endif %}
-
       <div>
-        {% if is_like %}
-        <a href="{{url_for('like_post', id=post.id)}}">
-          <i
-            class="fas fa-heart"
-            style="font-size:2rem;color:red"
-          >Liked</i>
-        </a>
+        {% if is_flag %}
+          <a 
+            href="{{url_for('flag_post', id=post.id)}}"
+            style="display:flex;align-items:center">
+            <h6
+              style="color:red;font-size:.6rem;margin-right:1rem">inappropriate
+            </h6>
+            <i
+              class="fab fa-font-awesome"
+              style="color:red;font-size:1.5rem"
+            >
+            </i>
+          </a>
         {% else %}
-        <a href="{{url_for('like_post', id=post.id)}}">
-          <i
-            class="far fa-heart"
-            style="font-size:2rem;color:black"
-          >Unlike</i>
-        </a>
+          <a 
+            href="{{url_for('flag_post', id=post.id)}}"
+            class="inappropriate">
+            <h6
+              style="color:black;font-size:.6rem;margin-right:1rem">appropriate
+            </h6>
+            <i
+              class="fab fa-font-awesome"
+              style="color:black;font-size:1.5rem"
+            >
+            </i>
+          </a>
         {% endif %} 
-        </div>
+      </div>
+      {% endif %}
     </div>  
     
 
@@ -86,6 +106,7 @@
         class="collapse"
         aria-labelledby="headingTwo"
         data-parent="#accordionExample"
+        style="padding-bottom: 1rem"
       >
         {% for comment in comments %}
         <div class="card card-body">
